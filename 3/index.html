@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="style.css">
+	<title>My Assignment 3</title>
+</head>
+<body>
+	<header>
+		Welcome to this assignment (3)
+	</header>
+	here is the count
+	<div id="the_count"></div>
+	<button id="double_button">*{Click me to multiply the count by 2 (woah)}*</button>
+	<button id="up_button">^{Click me to increase the count}^</button>
+	<button id="down_button">v{Click me to decrease the count}v</button>
+</body>
+	<script>
+		//the initial setup
+		// add the counter's property
+		const the_count_variable = document.getElementById("the_count");
+		let count_variable = 0;
+		the_count_variable.innerHTML=count_variable;
+		//the actual functionality
+		// select the incrementer buttons
+		const up_button_selected_variable = document.getElementById("up_button");
+		const down_button_selected_variable = document.getElementById("down_button");
+		const double_button_selected_variable = document.getElementById("double_button");
+		// add events
+		up_button_selected_variable.addEventListener("click", () => {
+					count_variable = count_variable + 1 ;
+					the_count_variable.innerHTML=count_variable;
+				});
+		down_button_selected_variable.addEventListener("click", () => {
+					count_variable = count_variable - 1 ;
+					the_count_variable.innerHTML=count_variable;
+				});
+		double_button_selected_variable.addEventListener("click", () => {
+					count_variable = count_variable * 2 ;
+					the_count_variable.innerHTML=count_variable;
+				});
+	</script>
+</html>
