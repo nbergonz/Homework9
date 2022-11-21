@@ -1,0 +1,21 @@
+{
+  "name": "fullstack-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "zx run.mjs",
+    "postinstall": "zx install-all.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "env": "^0.0.2",
+    "mongodb": "^4.11.0",
+    "mongoose": "^6.7.2",
+    "zx": "^7.1.1"
+  }
+}
