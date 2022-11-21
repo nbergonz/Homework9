@@ -17,17 +17,15 @@ router.get("/", async (req, res, next) => {
 
 router.post("/authenticate", async (req, res) => {
 	// body should be JSON
-	let response_boolean_variable=process.env.PASSWORD==req.body.password
+	let response_boolean_variable= req.body.password==process.env.PASSWORD
 	return res.send({success: response_boolean_variable})
 });
 
 router.post("/delete-post", async (req, res) => {
 	// body should be JSON
 	const body = req.body;
-	console.log(req.body)
 	// create blog model with the request body
 	const response = await BlogModel.deleteOne({title: body.title});
-	console.log(response)
 	return res.send(response)
 });
 
@@ -35,11 +33,17 @@ router.post("/delete-post", async (req, res) => {
 router.post("/replace-post", async (req, res) => {
 	// body should be JSON
 	const body = req.body;
-	console.log(req.body)
 	// create blog model with the request body
-	const response = await BlogModel.findOneAndUpdate({title: body.title});
-	console.log(response)
-	return res.send(response)
+	try {
+		const response = await BlogModel.findOneAndUpdate({title: body.title}, {content: body.new_body, title: body.new_title});
+		return res.send({ success : "true" })
+	} catch (error) {
+		if ( error.name === "MongoServerError" && error.code === 11000 ) {
+			return res.send({ success : "false" })
+		} else {
+			res.send(err)
+		}
+	}
 });
 
 router.post("/create-post", async (req, res) => {
