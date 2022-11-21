@@ -4,9 +4,11 @@ import {Link} from "react-router-dom";
 export function Create() {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
+	const [password, setPassword] = useState("");
 	const [done, setDone] = useState(false);
 	const [loading, setLoading] = useState(0);//a loading state
 	const [incomplete, setIncomplete] = useState(0);//the form not filled in correctly
+	//console.log(process.env.PASSWORD)
 	async function handleSubmit(e) {
 		setDone(false)
 		if ((title=="") ||  (content=="")) {
@@ -20,26 +22,37 @@ export function Create() {
 			setIncomplete(0)//is complete
 			const requestData = JSON.stringify({title, content});
 			const headers = {"content-type": "application/json"};
-			//is loading content
 			setLoading(1);
-			//post to the backend
-			const resp = await fetch("http://localhost:3000/blog/create-post", {
+			const auth_resp = await fetch("http://localhost:3000/blog/authenticate", {
 				method: "post",
 				body: requestData,
 				headers: headers
 			});
-			const json = await resp.json();
-			if (json.hasOwnProperty('success') && json.success == 'false' ) {
-				setLoading(2);//error state
-				setIncomplete(3);//notify about the duplicate title
+			const auth_resp_json = await auth_resp.json();
+			console.log(auth_resp_json)
+			if (auth_resp_json.success == 'true') {//TODO add password
+				//is loading content
+				//post to the backend
+				const resp = await fetch("http://localhost:3000/blog/create-post", {
+					method: "post",
+					body: requestData,
+					headers: headers
+				});
+				const json = await resp.json();
+				if (json.hasOwnProperty('success') && json.success == 'false' ) {
+					setLoading(2);//error state
+					setIncomplete(3);//notify about the duplicate title
+				} else {
+					setDone(true);
+				}
 			} else {
-				setDone(true);
+				setIncomplete(4)
 			}
 			setLoading(0);
 		}
 	}
 	if (incomplete > 0) {
-		window.alert(incomplete == 1 ? "Title required" : ( incomplete == 2 ? "Body text required" : "Title already exists. The title must be unique. Please enter a different title." ));
+		window.alert(incomplete == 1 ? "Title required" : ( incomplete == 2 ? "Body text required" : (incomplete == 3 ? "Title already exists. The title must be unique. Please enter a different title." : "incorrect password" )));
 		setIncomplete(0)
 	}
 	if ( loading > 0 ) return <div>Processing...</div>;//a simple loading page
@@ -66,6 +79,11 @@ export function Create() {
 					onChange={(e) => setContent(e.currentTarget.value)}
 				></textarea>
 			</div>
+			<input
+				placeholder="secret_password"
+				value={password}
+				onChange={(e) => setPassword(e.currentTarget.value)}
+			/>
 			<button>Post</button>
 		</form>
 	);

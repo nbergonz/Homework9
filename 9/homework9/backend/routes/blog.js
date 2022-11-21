@@ -1,6 +1,7 @@
 import express from "express";
 
 import {BlogModel} from "../schema/blog.js";
+import {ObjectId} from "mongoose";
 
 const router = express.Router();
 
@@ -10,6 +11,35 @@ router.get("/", async (req, res, next) => {
 	const blogs = await BlogModel.find({});
 	// convert each blog to an object and send an array to client
 	return res.send(blogs.map((blog) => blog.toObject()));
+});
+
+
+
+router.post("/authenticate", async (req, res) => {
+	// body should be JSON
+	console.log(process.env.NODE_ENV)
+	return res.send({success: "true"})
+});
+
+router.post("/delete-post", async (req, res) => {
+	// body should be JSON
+	const body = req.body;
+	console.log(req.body)
+	// create blog model with the request body
+	const response = await BlogModel.deleteOne({title: body.title});
+	console.log(response)
+	return res.send(response)
+});
+
+
+router.post("/replace-post", async (req, res) => {
+	// body should be JSON
+	const body = req.body;
+	console.log(req.body)
+	// create blog model with the request body
+	const response = await BlogModel.findOneAndUpdate({title: body.title});
+	console.log(response)
+	return res.send(response)
 });
 
 router.post("/create-post", async (req, res) => {
@@ -31,5 +61,7 @@ router.post("/create-post", async (req, res) => {
 		return res.send(blog.toObject());
 	});
 });
+
+
 
 export default router;
