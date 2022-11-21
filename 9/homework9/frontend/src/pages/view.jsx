@@ -16,18 +16,32 @@ export function View() {
 	}, [reload]);
 	async function handleDelete(title) {
 		setLoading(1);
-		setReload(0);
-		const requestData = JSON.stringify({title});
+		let password=window.prompt("You have a password for that delete request buddy?","uber_secret_password")
+		const requestData = JSON.stringify({password});
 		const headers = {"content-type": "application/json"};
-		//is loading content
-		//post to the backend
-		const resp = await fetch("http://localhost:3000/blog/delete-post", {
+		const view_auth_resp = await fetch("http://localhost:3000/blog/authenticate", {
 			method: "post",
 			body: requestData,
 			headers: headers
 		});
-		const json = await resp.json();
-		setReload(1);
+		const view_auth_resp_json = await view_auth_resp.json();
+		console.log(view_auth_resp_json)
+		if (view_auth_resp_json.success) {//pls don't look at my spaghetti
+			setReload(0);
+			const requestData = JSON.stringify({title});
+			const headers = {"content-type": "application/json"};
+			//is loading content
+			//post to the backend
+			const resp = await fetch("http://localhost:3000/blog/delete-post", {
+				method: "post",
+				body: requestData,
+				headers: headers
+			});
+			const json = await resp.json();
+			setReload(1);
+		} else {
+			window.alert("Incorrect Password")
+		}
 		setLoading(0);
 	}
 	if ( loading > 0 ) return (<div>Processing...</div>);//a simple loading page

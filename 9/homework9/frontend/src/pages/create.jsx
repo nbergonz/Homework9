@@ -8,7 +8,6 @@ export function Create() {
 	const [done, setDone] = useState(false);
 	const [loading, setLoading] = useState(0);//a loading state
 	const [incomplete, setIncomplete] = useState(0);//the form not filled in correctly
-	//console.log(process.env.PASSWORD)
 	async function handleSubmit(e) {
 		setDone(false)
 		if ((title=="") ||  (content=="")) {
@@ -29,7 +28,6 @@ export function Create() {
 				headers: headers
 			});
 			const auth_resp_json = await auth_resp.json();
-			console.log(auth_resp_json)
 			if (auth_resp_json.success) {//pls don't look at my spaghetti
 				const requestData = JSON.stringify({title, content, password});//i was thinking of authenticating here to reduce server calls but this could be an attack vector
 				//is loading content
