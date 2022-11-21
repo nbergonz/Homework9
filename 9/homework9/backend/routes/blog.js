@@ -17,8 +17,8 @@ router.get("/", async (req, res, next) => {
 
 router.post("/authenticate", async (req, res) => {
 	// body should be JSON
-	console.log(process.env.NODE_ENV)
-	return res.send({success: "true"})
+	let response_boolean_variable=process.env.PASSWORD==req.body.password
+	return res.send({success: response_boolean_variable})
 });
 
 router.post("/delete-post", async (req, res) => {

@@ -20,7 +20,7 @@ export function Create() {
 		} else {
 			e.preventDefault();
 			setIncomplete(0)//is complete
-			const requestData = JSON.stringify({title, content});
+			const requestData = JSON.stringify({password});
 			const headers = {"content-type": "application/json"};
 			setLoading(1);
 			const auth_resp = await fetch("http://localhost:3000/blog/authenticate", {
@@ -30,7 +30,8 @@ export function Create() {
 			});
 			const auth_resp_json = await auth_resp.json();
 			console.log(auth_resp_json)
-			if (auth_resp_json.success == 'true') {//TODO add password
+			if (auth_resp_json.success) {//pls don't look at my spaghetti
+				const requestData = JSON.stringify({title, content, password});//i was thinking of authenticating here to reduce server calls but this could be an attack vector
 				//is loading content
 				//post to the backend
 				const resp = await fetch("http://localhost:3000/blog/create-post", {
@@ -47,7 +48,7 @@ export function Create() {
 				}
 			} else {
 				setIncomplete(4)
-			}
+			}//ma'ma mia
 			setLoading(0);
 		}
 	}
